@@ -1,4 +1,3 @@
-from dendropy.interop import paup
 import dendropy
 import numpy as np
 import sys
