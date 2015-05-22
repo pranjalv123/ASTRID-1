@@ -2,6 +2,9 @@ from dendropy.interop import paup
 import dendropy
 import numpy as np
 import sys
+import subprocess
+
+fnj_exec='fnj'
 
 def nj(m):
     q = np.zeros(m.shape)
@@ -23,12 +26,22 @@ def njst(tl):
                 countmat[xi, yi] += 1
                 njmat[xi, yi] += m(x.taxon, y.taxon)
     njmat /= countmat
-    print len(taxindices)
+    
+    lines = []
+
+    
     for i in taxindices:
-        print i, '     ',
-        for j in taxindices:
-            print njmat[taxindices[i], taxindices[j]],
-        print
+        vals = ' '.join([str(njmat[taxindices[i], taxindices[j]]) for j in taxindices])
+        lines.append('     '.join([i.label, vals]))
+    distmat = '\n'.join(lines)
+
+    p = subprocess.Popen([fnj_exec, '-I', 'phylip'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    p.stdin.write(str(len(taxindices)))
+    p.stdin.write('\n')
+    p.stdin.write(distmat)
+    p.stdin.close()
+    tree = [i for i in p.stdout.readlines() if '<newick>' in i][0].strip().replace('<newick>', '').replace('</newick>', '')
+    print tree
 #    print njmat
 
 
