@@ -1,5 +1,5 @@
-# pynjst
-Python implementation of NJst
+# ASTRID
+Accurate Species TRee Reconstruction with Internode Distances
 
 To use:
 
