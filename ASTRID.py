@@ -60,9 +60,9 @@ def njst(tl, method, fname = None):
     countmat = np.zeros((len(tl.taxon_set), len(tl.taxon_set)))
     njmat = np.zeros((len(tl.taxon_set), len(tl.taxon_set)))
     for t in tl:
-        for e in t.get_edge_set():
+        for e in t.edges():
             e.length=1 * float(len(t.taxon_set))/float(len(t.leaf_nodes()))
-        m = dendropy.treecalc.PatristicDistanceMatrix(t)
+        m = dendropy.calculate.treemeasure.PatristicDistanceMatrix(t)
         for x in t.leaf_nodes():
             xi = taxindices[x.taxon]
             for y in t.leaf_nodes():
