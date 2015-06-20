@@ -5,7 +5,8 @@ import subprocess
 import tempfile
 import os
 from numpy import ma
-
+import time
+from PatristicDistanceMatrix import PatristicDistanceMatrix_np
 
 nj_exec='phydstar'
 
@@ -36,8 +37,7 @@ def ninja(fname):
     tree = p.stdout.read()
     return tree
 
-
-import time
+@profile
 def njst(tl, method, fname = None):
     if fname:
         try: 
@@ -56,20 +56,16 @@ def njst(tl, method, fname = None):
 
         
     start = time.time()
-    taxindices = dict([(j, i) for i, j in enumerate(tl.taxon_set)])
-    countmat = np.zeros((len(tl.taxon_set), len(tl.taxon_set)))
+    taxindices = dict([(j, i) for i, j in enumerate(sorted(list(tl.taxon_set)))])
+    countmat = np.eye(len(tl.taxon_set))
     njmat = np.zeros((len(tl.taxon_set), len(tl.taxon_set)))
     for t in tl:
         for e in t.edges():
             e.length=1
-        m = dendropy.calculate.treemeasure.PatristicDistanceMatrix(t)
-        for x in t.leaf_nodes():
-            xi = taxindices[x.taxon]
-            for y in t.leaf_nodes():
-                yi = taxindices[y.taxon]
-                countmat[xi, yi] += 1
-                njmat[xi, yi] += m(x.taxon, y.taxon)
-    
+        m = PatristicDistanceMatrix_np(t, taxindices).distmat()
+        countmat += (m > 0)
+        njmat += m
+
     njmat = ma.array(njmat, mask = (countmat == 0))
     countmat = ma.array(countmat, mask = (countmat == 0))
 
@@ -77,8 +73,11 @@ def njst(tl, method, fname = None):
     print "Time to construct matrix", time.time() - start, len(tl), len(tl.taxon_set)
     lines = []
     start = time.time()
-    for i in taxindices:
-        vals = ' '.join([str(njmat[taxindices[i], taxindices[j]]) for j in taxindices])
+
+    staxkeys = sorted(taxindices.keys())
+    
+    for i in staxkeys:
+        vals = ' '.join(["%.3f" % (njmat[taxindices[i], taxindices[j]]) for j in staxkeys])
         lines.append('     '.join([i.label, vals]))
     distmat = '\n'.join([i.replace('--' ,'-99.0') for i in lines])
     tmp = None
