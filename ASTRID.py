@@ -37,7 +37,6 @@ def ninja(fname):
     tree = p.stdout.read()
     return tree
 
-@profile
 def njst(tl, method, fname = None):
     if fname:
         try: 
