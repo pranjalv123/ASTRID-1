@@ -83,18 +83,34 @@ class ASTRID:
     def write_tree(self, outputfile):
         open(outputfile, 'w').write(self.tree)
 
+        
+
+        
 if __name__ == '__main__':
-#    parser = 
+    parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.")
+
+    parser.add_argument('-i', '--input', required=True, dest='input',
+                        help="File containing gene trees as newick strings")
+    parser.add_argument('-o', '--output', required=True, dest='output',
+                        help="Output file for species tree")
+    parser.add_argument('-m', '--method', default='auto', dest='method',
+                        help="Distance-based method to use (default: fastme if the distance matrix is complete, bionj otherwise")
+    parser.add_argument('-c', '--cache', dest='cache',
+                        help="Save distance matrix in PHYLIP format, or use cached matrix if it exists (useful for trying multiple distance-based methods)")
+    
+    args = parser.parse_args()
 
     
-    method = sys.argv[1]
-    fname = None
-    if len(sys.argv) > 4:
-        fname = sys.argv[4]
+    method = args.method
 
-    a = ASTRID(sys.argv[2])
+    if 'cache' in vars(args):
+        fname = args.cache
+    else:
+        fname = None
+        
+    a = ASTRID(args.input)
     a.read_trees()
     a.generate_matrix()
     a.write_matrix(fname)
     a.infer_tree(method)
-    a.write_tree(sys.argv[3])
+    a.write_tree(args.output)
