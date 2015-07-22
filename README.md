@@ -13,7 +13,7 @@ Clone the git repository, then do
 
 # Usage
 
-      ASTRID.py [-h] -i INPUT -o OUTPUT [-m METHOD] [-c CACHE]
+      ASTRID.py [-h] -i INPUT [-o OUTPUT] [-m METHOD] [-c CACHE]
 
 ASTRID: Accurate Species TRees from Internode Distances.
 
