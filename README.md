@@ -3,6 +3,14 @@ Accurate Species TRee Reconstruction with Internode Distances
 
 For more information, see http://pranjalv123.github.io/ASTRID/
 
+# Installation
+
+Clone the git repository, then do
+
+  cd distmethods
+
+  sh install.sh
+
 # Usage
 
   ASTRID.py [-h] -i INPUT -o OUTPUT [-m METHOD] [-c CACHE]
