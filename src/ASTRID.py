@@ -53,10 +53,9 @@ class ASTRID:
     def write_matrix(self, fname=None, nanplaceholder='-99.0'):
         lines = []
         staxkeys = sorted(self.taxindices.keys())
-    
         for i in staxkeys:
             vals = ' '.join(["%.3f" % (self.njmat[self.taxindices[i], self.taxindices[j]]) for j in staxkeys])
-            lines.append('     '.join([i.label, vals]))
+            lines.append('     '.join([i.label.replace(' ', '_'), vals]))
         distmat = '\n'.join([i.replace('--' ,nanplaceholder) for i in lines])
 
         tmp = None
@@ -78,12 +77,14 @@ class ASTRID:
             else:
                 method = "fastme"
         method = getattr(DistanceMethods, method)
-        self.tree = method(self.fname)
+        self.tree = dendropy.Tree.get_from_string(method(self.fname), 'newick')
+        
 
     def write_tree(self, outputfile):
-        open(outputfile, 'w').write(self.tree)
+        open(outputfile, 'w').write(self.tree.as_string('newick', suppress_edge_lengths=True))
 
-        
+    def tree_str(self):
+        return self.tree.as_string('newick', suppress_edge_lengths=True)
 
         
 if __name__ == '__main__':
@@ -91,7 +92,7 @@ if __name__ == '__main__':
 
     parser.add_argument('-i', '--input', required=True, dest='input',
                         help="File containing gene trees as newick strings")
-    parser.add_argument('-o', '--output', required=True, dest='output',
+    parser.add_argument('-o', '--output', dest='output',
                         help="Output file for species tree")
     parser.add_argument('-m', '--method', default='auto', dest='method',
                         help="Distance-based method to use (default: fastme if the distance matrix is complete, bionj otherwise")
@@ -113,4 +114,6 @@ if __name__ == '__main__':
     a.generate_matrix()
     a.write_matrix(fname)
     a.infer_tree(method)
-    a.write_tree(args.output)
+    print a.tree_str()
+    if 'output' in vars(args):
+        a.write_tree(args.output)

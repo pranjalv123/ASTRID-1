@@ -14,8 +14,13 @@
 # along with ASTRID.  If not, see <http://www.gnu.org/licenses/>.
 
 import subprocess
+import os
 
-phydstar_exec='PhyDstar.jar'
+
+path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+phydstar_exec=path + '/distmethods/' + 'PhyDstar.jar'
+fastme_exec=path + '/distmethods/' + 'fastme'
+
 
 def phydstar(nj, fname):
     p = subprocess.Popen(['java',  '-jar', phydstar_exec, '-d', nj, '-i', fname])
@@ -33,7 +38,7 @@ def unj(fname):
     return phydstar('UNJ', fname)
 def fastme(fname):
     print fname + '_fastme.t'
-    p = subprocess.Popen(['fastme', '-i', fname, '-o', fname + '_fastme.t'])
+    p = subprocess.Popen([fastme_exec, '-i', fname, '-o', fname + '_fastme.t'])
     p.wait()
     tree = open(fname + '_fastme.t').read()
     return tree
