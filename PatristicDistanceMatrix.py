@@ -1,20 +1,57 @@
 #! /usr/bin/env python
 
-##############################################################################
-##  DendroPy Phylogenetic Computing Library.
-##
-##  Copyright 2010-2014 Jeet Sukumaran and Mark T. Holder.
-##  All rights reserved.
-##
-##  See "LICENSE.txt" for terms and conditions of usage.
-##
-##  If you use this work or any portion thereof in published work,
-##  please cite it as:
-##
-##     Sukumaran, J. and M. T. Holder. 2010. DendroPy: a Python library
-##     for phylogenetic computing. Bioinformatics 26: 1569-1571.
-##
-##############################################################################
+# This file is part of ASTRID.
+#
+# ASTRID is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ASTRID is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ASTRID.  If not, see <http://www.gnu.org/licenses/>.
+
+
+# DendroPy Phylogenetic Computing Library
+
+# Copyright (c) 2014 Jeet Sukumaran and Mark T. Holder.
+# All rights reserved.
+
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * The names of its contributors may not be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL JEET SUKUMARAN OR MARK T. HOLDER
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+
+# If you use this work or any portion thereof in published work,
+# please cite it as:
+
+#    Sukumaran, J. and M. T. Holder. 2010. DendroPy: a Python library
+#    for phylogenetic computing. Bioinformatics 26: 1569-1571.
+
 
 """
 Statistics, metrics, measurements, and values calculated on (single) trees.

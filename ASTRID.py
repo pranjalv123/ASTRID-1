@@ -1,3 +1,18 @@
+# This file is part of ASTRID.
+#
+# ASTRID is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# ASTRID is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with ASTRID.  If not, see <http://www.gnu.org/licenses/>.
+
 import dendropy
 import numpy as np
 import sys
@@ -7,101 +22,69 @@ import os
 from numpy import ma
 import time
 from PatristicDistanceMatrix import PatristicDistanceMatrix_np
-
-nj_exec='phydstar'
-
-
-def phydstar(nj, fname):
-    p = subprocess.Popen(['bash', nj_exec, '-d', nj, '-i', fname])
-    p.wait()
-    tree = open(fname + '_' + nj.lower() + '.t').read()
-    return tree
-
-def bionj(fname):
-    return phydstar('BioNJ', fname)
-def mvr(fname):
-    return phydstar('MVR', fname)
-def nj(fname):
-    return phydstar('NJ', fname)
-def unj(fname):
-    return phydstar('UNJ', fname)
-def fastme(fname):
-    print fname + '_fastme.t'
-    p = subprocess.Popen(['fastme', '-i', fname, '-o', fname + '_fastme.t'])
-    p.wait()
-    tree = open(fname + '_fastme.t').read()
-    return tree    
-def ninja(fname):
-    print open(fname).read()
-    p = subprocess.Popen(['ninja', '--in_type', 'd', fname], stdout=subprocess.PIPE)
-    tree = p.stdout.read()
-    return tree
-
-def njst(tl, method, fname = None):
-    if fname:
-        try: 
-            if len(open(fname).read()):
-                start = time.time()
-                tree = method(fname)
-                print "Time to generate tree", time.time() - start, fname
-                return tree
-        except IOError:
-            pass
+from DistanceMethods import *
 
 
-    start = time.time()
-    tl = dendropy.TreeList.get_from_path(tl, 'newick')
-    print "Time to read trees: ", time.time() - start, len(tl), len(tl.taxon_set)
-
+class ASTRID:
+    def __init__(self, genetreefile):
+        self.genetreefile = genetreefile
+        self.pct = 0.0
         
-    start = time.time()
-    taxindices = dict([(j, i) for i, j in enumerate(sorted(list(tl.taxon_set)))])
-    countmat = np.eye(len(tl.taxon_set))
-    njmat = np.zeros((len(tl.taxon_set), len(tl.taxon_set)))
-    for t in tl:
-        for e in t.edges():
-            e.length=1
-        m = PatristicDistanceMatrix_np(t, taxindices).distmat()
-        countmat += (m > 0)
-        njmat += m
+    def read_trees(self):
+        self.tl = dendropy.TreeList.get_from_path(self.genetreefile, 'newick')
 
-    njmat = ma.array(njmat, mask = (countmat == 0))
-    countmat = ma.array(countmat, mask = (countmat == 0))
+    def generate_matrix(self):
+        self.taxindices = dict([(j, i) for i, j in enumerate(sorted(list(self.tl.taxon_namespace)))])
+        self.countmat = np.eye(len(self.tl.taxon_namespace))
+        self.njmat = np.zeros((len(self.tl.taxon_namespace), len(self.tl.taxon_namespace)))
+        for t in self.tl:
+            for e in t.edges():
+                e.length=1
+            m = PatristicDistanceMatrix_np(t, self.taxindices).distmat()
+            self.countmat += (m > 0)
+            self.njmat += m
+            self.pct += 1.0/len(self.tl)
+        self.njmat = ma.array(self.njmat, mask = (self.countmat == 0))
+        self.countmat = ma.array(self.countmat, mask = (self.countmat == 0))
+        
+        self.njmat /= self.countmat
 
-    njmat /= countmat
-    print "Time to construct matrix", time.time() - start, len(tl), len(tl.taxon_set)
-    lines = []
-    start = time.time()
-
-    staxkeys = sorted(taxindices.keys())
+    def write_matrix(self, fname=None, nanplaceholder='-99.0'):
+        lines = []
+        staxkeys = sorted(self.taxindices.keys())
     
-    for i in staxkeys:
-        vals = ' '.join(["%.3f" % (njmat[taxindices[i], taxindices[j]]) for j in staxkeys])
-        lines.append('     '.join([i.label, vals]))
-    distmat = '\n'.join([i.replace('--' ,'-99.0') for i in lines])
-    tmp = None
-    if fname == None:
-        tmpfd, fname = tempfile.mkstemp()
-        tmp = os.fdopen(tmpfd, 'w')
-    tmp = open(fname, 'w')
-    tmp.write(str(len(taxindices)))
-    tmp.write('\n')
-    tmp.write(distmat)
-    tmp.write('\n')
-    tmp.close()    
-    print "Time to write matrix", time.time() - start, len(tl), len(tl.taxon_set)
+        for i in staxkeys:
+            vals = ' '.join(["%.3f" % (self.njmat[self.taxindices[i], self.taxindices[j]]) for j in staxkeys])
+            lines.append('     '.join([i.label, vals]))
+        distmat = '\n'.join([i.replace('--' ,nanplaceholder) for i in lines])
 
-    start = time.time()
-    
-    tree = method(fname)
-    print "Time to generate tree", time.time() - start, len(tl), len(tl.taxon_set)
-    return tree
+        tmp = None
+        if fname == None:
+            tmpfd, fname = tempfile.mkstemp()
+            tmp = os.fdopen(tmpfd, 'w')
+        tmp = open(fname, 'w')
+        tmp.write(str(len(self.taxindices)))
+        tmp.write('\n')
+        tmp.write(distmat)
+        tmp.write('\n')
+        tmp.close()
+        self.fname = fname
+
+    def infer_tree(self, method):
+        self.tree = method(self.fname)
+
+    def write_tree(self, outputfile):
+        open(outputfile, 'w').write(self.tree)
 
 if __name__ == '__main__':
     method = globals()[sys.argv[1]]
-    tl = sys.argv[2]
     fname = None
     if len(sys.argv) > 4:
         fname = sys.argv[4]
-    tree = njst(tl, method, fname)
-    open(sys.argv[3], 'w').write(tree)
+
+    a = ASTRID(sys.argv[2])
+    a.read_trees()
+    a.generate_matrix()
+    a.write_matrix(fname)
+    a.infer_tree(method)
+    a.write_tree(sys.argv[3])
