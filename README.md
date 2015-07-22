@@ -7,13 +7,13 @@ For more information, see http://pranjalv123.github.io/ASTRID/
 
 Clone the git repository, then do
 
-  cd distmethods
+      cd distmethods
 
-  sh install.sh
+      sh install.sh
 
 # Usage
 
-        ASTRID.py [-h] -i INPUT -o OUTPUT [-m METHOD] [-c CACHE]
+      ASTRID.py [-h] -i INPUT -o OUTPUT [-m METHOD] [-c CACHE]
 
 ASTRID: Accurate Species TRees from Internode Distances.
 
