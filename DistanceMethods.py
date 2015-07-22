@@ -15,10 +15,10 @@
 
 import subprocess
 
-phydstar_exec='phydstar'
+phydstar_exec='PhyDstar.jar'
 
 def phydstar(nj, fname):
-    p = subprocess.Popen(['bash', phydstar_exec, '-d', nj, '-i', fname])
+    p = subprocess.Popen(['java',  '-jar', phydstar_exec, '-d', nj, '-i', fname])
     p.wait()
     tree = open(fname + '_' + nj.lower() + '.t').read()
     return tree

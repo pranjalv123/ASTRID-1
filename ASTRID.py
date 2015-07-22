@@ -21,8 +21,9 @@ import tempfile
 import os
 from numpy import ma
 import time
+import argparse
 from PatristicDistanceMatrix import PatristicDistanceMatrix_np
-from DistanceMethods import *
+import DistanceMethods
 
 
 class ASTRID:
@@ -44,9 +45,9 @@ class ASTRID:
             self.countmat += (m > 0)
             self.njmat += m
             self.pct += 1.0/len(self.tl)
+        self.has_missing = (self.countmat == 0).any()
         self.njmat = ma.array(self.njmat, mask = (self.countmat == 0))
         self.countmat = ma.array(self.countmat, mask = (self.countmat == 0))
-        
         self.njmat /= self.countmat
 
     def write_matrix(self, fname=None, nanplaceholder='-99.0'):
@@ -71,13 +72,22 @@ class ASTRID:
         self.fname = fname
 
     def infer_tree(self, method):
+        if method == "auto":
+            if self.has_missing:
+                method = "bionj"
+            else:
+                method = "fastme"
+        method = getattr(DistanceMethods, method)
         self.tree = method(self.fname)
 
     def write_tree(self, outputfile):
         open(outputfile, 'w').write(self.tree)
 
 if __name__ == '__main__':
-    method = globals()[sys.argv[1]]
+#    parser = 
+
+    
+    method = sys.argv[1]
     fname = None
     if len(sys.argv) > 4:
         fname = sys.argv[4]
