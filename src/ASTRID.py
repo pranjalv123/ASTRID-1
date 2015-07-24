@@ -27,14 +27,17 @@ import DistanceMethods
 
 
 class ASTRID:
-    def __init__(self, genetreefile):
-        self.genetreefile = genetreefile
+    def __init__(self, genetrees):
+        self.genetrees = genetrees
         self.pct = 0.0
+        self.state = "Initialized"
         
     def read_trees(self):
-        self.tl = dendropy.TreeList.get_from_path(self.genetreefile, 'newick')
+        self.state = "Reading trees"
+        self.tl = dendropy.TreeList.get_from_string(self.genetrees, 'newick')
 
     def generate_matrix(self):
+        self.state = "Generating Matrix"
         self.taxindices = dict([(j, i) for i, j in enumerate(sorted(list(self.tl.taxon_namespace)))])
         self.countmat = np.eye(len(self.tl.taxon_namespace))
         self.njmat = np.zeros((len(self.tl.taxon_namespace), len(self.tl.taxon_namespace)))
@@ -51,6 +54,7 @@ class ASTRID:
         self.njmat /= self.countmat
 
     def write_matrix(self, fname=None, nanplaceholder='-99.0'):
+        self.state = "Writing matrix"
         lines = []
         staxkeys = sorted(self.taxindices.keys())
         for i in staxkeys:
@@ -76,16 +80,26 @@ class ASTRID:
                 method = "bionj"
             else:
                 method = "fastme"
+        self.state = "Inferring tree with " + method
         method = getattr(DistanceMethods, method)
         self.tree = dendropy.Tree.get_from_string(method(self.fname), 'newick')
-        
+        self.state = "Done"
 
     def write_tree(self, outputfile):
-        open(outputfile, 'w').write(self.tree.as_string('newick', suppress_edge_lengths=True))
+        open(outputfile, 'w').write(self.tree_str())
 
     def tree_str(self):
-        return self.tree.as_string('newick', suppress_edge_lengths=True)
-
+        return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True)
+    def run(self, method, fname=None):
+        print "reading trees"
+        self.read_trees()
+        print "generating matrix"
+        self.generate_matrix()
+        print "writing matrix", fname
+        self.write_matrix(fname)
+        print "inferring tree"
+        self.infer_tree(method)
+        print self.tree_str()
         
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.")
@@ -109,11 +123,8 @@ if __name__ == '__main__':
     else:
         fname = None
         
-    a = ASTRID(args.input)
-    a.read_trees()
-    a.generate_matrix()
-    a.write_matrix(fname)
-    a.infer_tree(method)
+    a = ASTRID(open(args.input).read())
+    a.run(method, fname)
     print a.tree_str()
     if 'output' in vars(args):
         a.write_tree(args.output)
