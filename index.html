@@ -48,33 +48,33 @@
 <h2>
 <a id="installing-astrid" class="anchor" href="#installing-astrid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installing ASTRID</h2>
 
-<p>To install ASTRID, clone the github repository or download it from the links at left. </p>
+<p>To install ASTRID, clone the github repository or download it from the links at left. Then, run distmethods/install.sh. This will install the distance methods that ASTRID supports.</p>
 
-<p>Furthermore, whatever distance method you want to use must be installed on your computer. Currently, ASTRID supports FastME and PhyD*. </p>
+<p>Currently, ASTRID supports FastME and PhyD*. </p>
 
 <h3>
 <a id="fastme" class="anchor" href="#fastme" aria-hidden="true"><span class="octicon octicon-link"></span></a>FastME</h3>
 
-<p>Results presented in the ASTRID paper use FASTME 1, available at <a href="http://www.ncbi.nlm.nih.gov/CBBresearch/Desper/FastME.html">http://www.ncbi.nlm.nih.gov/CBBresearch/Desper/FastME.html</a>, but FASTME 2.0 is now available at <a href="http://www.atgc-montpellier.fr/fastme/binaries.php">http://www.atgc-montpellier.fr/fastme/binaries.php</a>, and works with ASTRID as well. In either case, FastME must be on the PATH with binary name `fastme'. </p>
+<p>Results presented in the ASTRID paper use FASTME 1, available at <a href="http://www.ncbi.nlm.nih.gov/CBBresearch/Desper/FastME.html">http://www.ncbi.nlm.nih.gov/CBBresearch/Desper/FastME.html</a>, but FASTME 2.0 is now available at <a href="http://www.atgc-montpellier.fr/fastme/binaries.php">http://www.atgc-montpellier.fr/fastme/binaries.php</a>, and works with ASTRID as well.</p>
 
 <h3>
 <a id="phyd" class="anchor" href="#phyd" aria-hidden="true"><span class="octicon octicon-link"></span></a>PhyD*</h3>
 
-<p>PhyD* is available at <a href="http://www.atgc-montpellier.fr/phyd/binaries.php">http://www.atgc-montpellier.fr/phyd/binaries.php</a>. It implements four algorithms: MVR<em>, BioNJ</em>, NJ<em>, and UNJ</em>. These methods are recommended for incomplete distance matrices. PhyD* must be on the PATH with binary name `phydstar'.</p>
+<p>PhyD* is available at <a href="http://www.atgc-montpellier.fr/phyd/binaries.php">http://www.atgc-montpellier.fr/phyd/binaries.php</a>. It implements four algorithms: MVR<em>, BioNJ</em>, NJ<em>, and UNJ</em>. These methods are recommended for incomplete distance matrices.</p>
 
 <h2>
 <a id="running-astrid" class="anchor" href="#running-astrid" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running ASTRID</h2>
 
 <p>ASTRID is run with the following command line arguments:</p>
 
-<pre><code>python astrid.py &lt;methodname&gt; &lt;genetrees&gt; &lt;outputtree&gt; [&lt;distancematrix&gt;]
+<pre><code>python ASTRID.py [-h] -i INPUT [-o OUTPUT] [-m METHOD] [-c CACHE]
 </code></pre>
 
 <ul>
-<li>methodname is one of "bionj", "mvr", "nj", "unj", or "fastme", depending on which method you would like to use. FastME is recommended when the distance matrix has no missing entries, and BioNJ is recommended if there are missing entries.</li>
-<li>genetrees is a file containing a list of gene trees in newick format.</li>
-<li>outputtree will contain the estimated species tree</li>
-<li>distancematrix is an optional argument specifying a place to save the distance matrix in PHYLIP format. This is useful if you would like to run multiple distance-based methods on the same gene tree set. If this file already exists, ASTRID will skip the matrix generation step and just run the species tree estimation step with the method specified.</li>
+<li>METHOD is one of "auto", "bionj", "mvr", "nj", "unj", or "fastme", depending on which method you would like to use. "auto" will use FastME when the distance matrix has no missing entries, and BioNJ* if there are missing entries.</li>
+<li>INPUT is a file containing a list of gene trees in newick format.</li>
+<li>OUTPUT will contain the estimated species tree; the species tree will also be output to the standard output</li>
+<li>CACHE is an optional argument specifying a place to save the distance matrix in PHYLIP format. This is useful if you would like to run multiple distance-based methods on the same gene tree set. If this file already exists, ASTRID will skip the matrix generation step and just run the species tree estimation step with the method specified.</li>
 </ul>
       </section>
       <footer>
