@@ -3,6 +3,8 @@ Accurate Species TRee Reconstruction with Internode Distances
 
 For more information, see http://pranjalv123.github.io/ASTRID/
 
+Join the ASTRID user group at https://groups.google.com/forum/#!forum/astrid-users/
+
 # Installation
 
 Clone the git repository, then do
