@@ -15,8 +15,9 @@ setup(name="ASTRID",
       url="https://github.com/pranjalv123/ASTRID",
       package_dir={'ASTRID':'src'},
       package_data={'ASTRID':['distmethods/install.py', 'distmethods/install.sh']},
+      data_files=['README.md', 'test/song_mammals.424.gene.tre'],
       packages=['ASTRID'],
-      scripts=['ASTRID', 'README.md'],
+      scripts=['ASTRID'],
       license='GPLv3',
       cmdclass={'install':install_with_distmethods}
       )
