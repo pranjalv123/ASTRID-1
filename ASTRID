@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+import argparse
+from ASTRID import ASTRID
+import sys
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.")
 
