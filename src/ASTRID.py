@@ -34,7 +34,10 @@ class ASTRID:
         
     def read_trees(self):
         self.state = "Reading trees"
-        self.tl = dendropy.TreeList.get_from_string(self.genetrees, 'newick')
+        if isinstance(self.genetrees, str):
+            self.tl = dendropy.TreeList.get_from_string(self.genetrees, 'newick')
+        else:
+            self.tl = self.genetrees
 
     def generate_matrix(self):
         self.state = "Generating Matrix"
@@ -101,30 +104,3 @@ class ASTRID:
         self.infer_tree(method)
         print self.tree_str()
         
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.")
-
-    parser.add_argument('-i', '--input', required=True, dest='input',
-                        help="File containing gene trees as newick strings")
-    parser.add_argument('-o', '--output', dest='output',
-                        help="Output file for species tree")
-    parser.add_argument('-m', '--method', default='auto', dest='method',
-                        help="Distance-based method to use (default: fastme if the distance matrix is complete, bionj otherwise")
-    parser.add_argument('-c', '--cache', dest='cache',
-                        help="Save distance matrix in PHYLIP format, or use cached matrix if it exists (useful for trying multiple distance-based methods)")
-    
-    args = parser.parse_args()
-
-    
-    method = args.method
-
-    if 'cache' in vars(args):
-        fname = args.cache
-    else:
-        fname = None
-        
-    a = ASTRID(open(args.input).read())
-    a.run(method, fname)
-    print a.tree_str()
-    if 'output' in vars(args):
-        a.write_tree(args.output)

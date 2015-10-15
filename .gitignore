@@ -1,1 +1,8 @@
 *.pyc
+src/distmethods/*
+!src/distmethods/install.py
+!src/distmethods/install.sh
+build/
+src/build
+dist/
+MANIFEST
