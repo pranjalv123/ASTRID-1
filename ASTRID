@@ -18,16 +18,13 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
-    
+    print vars(args)
     method = args.method
-
-    if 'cache' in vars(args):
-        fname = args.cache
-    else:
-        fname = None
+    fname = args.cache
         
     a = ASTRID(open(args.input).read())
     a.run(method, fname)
     print a.tree_str()
-    if 'output' in vars(args):
+    if vars(args)['output']:
         a.write_tree(args.output)
+    print a.tree_str()

@@ -27,10 +27,11 @@ import DistanceMethods
 
 
 class ASTRID:
-    def __init__(self, genetrees):
+    def __init__(self, genetrees, remap_names=True):
         self.genetrees = genetrees
         self.pct = 0.0
         self.state = "Initialized"
+        self.remap_names=remap_names
         
     def read_trees(self):
         self.state = "Reading trees"
@@ -42,6 +43,8 @@ class ASTRID:
     def generate_matrix(self):
         self.state = "Generating Matrix"
         self.taxindices = dict([(j, i) for i, j in enumerate(sorted(list(self.tl.taxon_namespace)))])
+        self.taxindices_inv = dict([(i, j.label) for i, j in enumerate(sorted(list(self.tl.taxon_namespace)))])
+
         self.countmat = np.eye(len(self.tl.taxon_namespace))
         self.njmat = np.zeros((len(self.tl.taxon_namespace), len(self.tl.taxon_namespace)))
         for t in self.tl:
@@ -62,7 +65,10 @@ class ASTRID:
         staxkeys = sorted(self.taxindices.keys())
         for i in staxkeys:
             vals = ' '.join(["%.3f" % (self.njmat[self.taxindices[i], self.taxindices[j]]) for j in staxkeys])
-            lines.append('     '.join([i.label.replace(' ', '_'), vals]))
+            if self.remap_names:
+                lines.append('     '.join([str(self.taxindices[i]), vals]))
+            else:
+                lines.append('     '.join([i.label.replace(' ', '_'), vals]))
         distmat = '\n'.join([i.replace('--' ,nanplaceholder) for i in lines])
 
         tmp = None
@@ -86,6 +92,9 @@ class ASTRID:
         self.state = "Inferring tree with " + method
         method = getattr(DistanceMethods, method)
         self.tree = dendropy.Tree.get_from_string(method(self.fname), 'newick')
+        if self.remap_names:
+            for t in self.tree.taxon_namespace:
+                t.label = self.taxindices_inv[int(t.label)]
         self.state = "Done"
 
     def write_tree(self, outputfile):
@@ -102,5 +111,5 @@ class ASTRID:
         self.write_matrix(fname)
         print "inferring tree"
         self.infer_tree(method)
-        print self.tree_str()
+
         
