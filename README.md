@@ -7,15 +7,28 @@ Join the ASTRID user group at https://groups.google.com/forum/#!forum/astrid-use
 
 # Installation
 
-Clone the git repository, then do
+To install the most recent stable version of ASTRID, run (as root)
 
-      cd distmethods
+      pip install astrid-phylo
+      
+(you should have installed setuptools, numpy, dendropy, and a C++ compiler)
 
-      sh install.sh
+You can also install the most recent version from github by cloning the repository, then running (as root)
+
+      python setup.py install 
+      
+To install locally (for example, if you're running on a server where you don't have root access), you can do
+
+      pip install astrid-phylo --user
+      
+or 
+
+      python setup.py install --user
+      
 
 # Usage
 
-      ASTRID.py [-h] -i INPUT [-o OUTPUT] [-m METHOD] [-c CACHE]
+      ASTRID [-h] -i INPUT [-o OUTPUT] [-m METHOD] [-c CACHE]
 
 ASTRID: Accurate Species TRees from Internode Distances.
 
