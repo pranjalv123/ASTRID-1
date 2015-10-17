@@ -6,7 +6,11 @@ class install_with_distmethods(install):
         install.run(self)
         import subprocess
         import sys
-        subprocess.call('bash ' + sys.path[0] + '/src/distmethods/install.sh', shell=True) 
+        import ASTRID
+        import os
+        dir = os.path.dirname(ASTRID.DistanceMethods.__file__)
+        print "Installing distance methods to " + dir
+        subprocess.call('bash ' + dir + '/distmethods/install.sh', shell=True) 
 
 setup(name="ASTRID",
       version="1.0",
