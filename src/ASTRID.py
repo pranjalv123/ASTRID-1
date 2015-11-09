@@ -69,7 +69,7 @@ class ASTRID:
                 lines.append('     '.join([str(self.taxindices[i]), vals]))
             else:
                 lines.append('     '.join([i.label.replace(' ', '_'), vals]))
-        distmat = '\n'.join([i.replace('--' ,nanplaceholder) for i in lines])
+        distmat = '\n'.join([i.replace('--' ,nanplaceholder).replace('nan', nanplaceholder) for i in lines])
 
         tmp = None
         if fname == None:

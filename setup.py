@@ -1,5 +1,5 @@
-from distutils.core import setup
-from distutils.command.install import install
+from setuptools import setup
+from setuptools.command.install import install
 
 class install_with_distmethods(install):
     def run(self):
@@ -12,7 +12,7 @@ class install_with_distmethods(install):
         print "Installing distance methods to " + dir
         subprocess.call('bash ' + dir + '/distmethods/install.sh', shell=True) 
 
-setup(name="ASTRID",
+setup(name="astrid-phylo",
       version="1.0",
       author="Pranjal Vachaspati",
       author_email="pr@nj.al",
