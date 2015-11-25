@@ -1,20 +1,30 @@
 #!/usr/bin/env python
 
 import argparse
-from ASTRID import ASTRID
 import sys
+if '--local' in sys.argv:
+    from src import ASTRID
+else:
+    from ASTRID import ASTRID
 
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description= "ASTRID: Accurate Species TRees from Internode Distances.")
 
     parser.add_argument('-i', '--input', required=True, dest='input',
                         help="File containing gene trees as newick strings")
+    parser.add_argument("--bsfile", dest="bsfile",
+                        help="File containing a list of bootstrap replicate files, one file per gene")
+    parser.add_argument("--bslist", dest="bslist", nargs = '+',
+                        help="List of bootstrap files")
     parser.add_argument('-o', '--output', dest='output',
                         help="Output file for species tree")
     parser.add_argument('-m', '--method', default='auto', dest='method',
                         help="Distance-based method to use (default: fastme if the distance matrix is complete, bionj otherwise")
     parser.add_argument('-c', '--cache', dest='cache',
                         help="Save distance matrix in PHYLIP format, or use cached matrix if it exists (useful for trying multiple distance-based methods)")
+    parser.add_argument('--taxon-cutoff', dest='taxon_cutoff', default=0, type=int,
+                        help="Only take trees with at least this many taxa")
     
     args = parser.parse_args()
 
@@ -23,7 +33,7 @@ if __name__ == '__main__':
     fname = args.cache
         
     a = ASTRID(open(args.input).read())
-    a.run(method, fname)
+    a.run(method, fname, args.taxon_cutoff)
     print a.tree_str()
     if vars(args)['output']:
         a.write_tree(args.output)

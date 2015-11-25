@@ -17,7 +17,7 @@ import subprocess
 import os
 import ASTRID
 
-path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))+ '/ASTRID'
+path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))#+ '/ASTRID'
 print path 
 phydstar_exec=path + '/distmethods/' + 'PhyDstar.jar'
 fastme_exec=path + '/distmethods/' + 'fastme'
@@ -40,6 +40,7 @@ def unj(fname):
     return phydstar('UNJ', fname)
 
 def fastme(fname):
+    print fastme_exec
     print fname + '_fastme.t'
     p = subprocess.Popen([fastme_exec, '-i', fname, '-o', fname + '_fastme.t'])
     p.wait()

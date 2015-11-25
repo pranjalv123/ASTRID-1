@@ -24,7 +24,7 @@ import time
 import argparse
 from PatristicDistanceMatrix import PatristicDistanceMatrix_np
 import DistanceMethods
-
+import fastdm
 
 class ASTRID:
     def __init__(self, genetrees, remap_names=True):
@@ -33,13 +33,17 @@ class ASTRID:
         self.state = "Initialized"
         self.remap_names=remap_names
         
-    def read_trees(self):
+    def read_trees(self, taxon_cutoff = 0):
         self.state = "Reading trees"
         if isinstance(self.genetrees, str):
-            self.tl = dendropy.TreeList.get_from_string(self.genetrees, 'newick')
+            self.tl = dendropy.TreeList.get_from_string(self.genetrees, 'newick', rooting='force-rooted')
+            
         else:
             self.tl = self.genetrees
-
+        for t in self.tl:
+            t.resolve_polytomies()
+        self.tl = dendropy.TreeList([i for i in self.tl if len(i.leaf_nodes())> taxon_cutoff])
+        print len(self.tl), "trees with", len(self.tl.taxon_namespace), "taxa"
     def generate_matrix(self):
         self.state = "Generating Matrix"
         self.taxindices = dict([(j, i) for i, j in enumerate(sorted(list(self.tl.taxon_namespace)))])
@@ -50,7 +54,13 @@ class ASTRID:
         for t in self.tl:
             for e in t.edges():
                 e.length=1
-            m = PatristicDistanceMatrix_np(t, self.taxindices).distmat()
+            m = fastdm.get_distmat(t, self.taxindices)
+            # mold = PatristicDistanceMatrix_np(t, self.taxindices).distmat()
+            # if ((m == mold).all() == False):
+            #     np.savetxt('/tmp/diff', (m - mold), fmt="%d")
+            #     np.savetxt('/tmp/m', m, fmt="%d")
+            #     np.savetxt('/tmp/mold', mold, fmt="%d")
+            #     assert(False)
             self.countmat += (m > 0)
             self.njmat += m
             self.pct += 1.0/len(self.tl)
@@ -102,14 +112,21 @@ class ASTRID:
 
     def tree_str(self):
         return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True)
-    def run(self, method, fname=None):
+    def run(self, method, fname=None, taxon_cutoff = 0):
         print "reading trees"
-        self.read_trees()
+        t = time.time()
+        self.read_trees(taxon_cutoff)
+        print t - time.time(), "seconds"
         print "generating matrix"
+        t = time.time()
         self.generate_matrix()
+        print t - time.time(), "seconds"
         print "writing matrix", fname
+        t = time.time()
         self.write_matrix(fname)
+        print t - time.time(), "seconds"
         print "inferring tree"
+        t = time.time()
         self.infer_tree(method)
-
+        print t - time.time(), "seconds"
         
