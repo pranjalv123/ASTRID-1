@@ -14,11 +14,11 @@ if __name__ == '__main__':
 
     parser.add_argument('-i', '--input', required=True, dest='input',
                         help="File containing gene trees as newick strings")
-    parser.add_argument("--bsfile", dest="bsfile",
+    parser.add_argument("-b --bsfile", dest="bsfile",
                         help="File containing a list of bootstrap replicate files, one file per gene")
     parser.add_argument("--bslist", dest="bslist", nargs = '+',
                         help="List of bootstrap files")
-    parser.add_argument("--bsreps", dest="bsreps", default=100, type=int,
+    parser.add_argument("-r --bsreps", dest="bsreps", default=100, type=int,
                         help="Number of bootstrap replicates")
     parser.add_argument('-o', '--output', dest='output',
                         help="Output file for species tree")
