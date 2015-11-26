@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import dendropy
 if '--local' in sys.argv:
     from src import ASTRID
 else:
@@ -17,6 +18,8 @@ if __name__ == '__main__':
                         help="File containing a list of bootstrap replicate files, one file per gene")
     parser.add_argument("--bslist", dest="bslist", nargs = '+',
                         help="List of bootstrap files")
+    parser.add_argument("--bsreps", dest="bsreps", default=100, type=int,
+                        help="Number of bootstrap replicates")
     parser.add_argument('-o', '--output', dest='output',
                         help="Output file for species tree")
     parser.add_argument('-m', '--method', default='auto', dest='method',
@@ -31,10 +34,74 @@ if __name__ == '__main__':
     print vars(args)
     method = args.method
     fname = args.cache
-        
+
+    bslist = None
+    if vars(args)['bslist']:
+        bslist = args.bslist
+    elif vars(args)['bsfile']:
+        bslist = open(args.bsfile).readlines()
+
     a = ASTRID(open(args.input).read())
     a.run(method, fname, args.taxon_cutoff)
+
+    print "ASTRID tree:"
     print a.tree_str()
     if vars(args)['output']:
         a.write_tree(args.output)
-    print a.tree_str()
+    
+    if bslist:
+        print "Running bootstrap replicates..."
+        bstrees = dendropy.TreeArray(taxon_namespace = a.tree.taxon_namespace)
+        nbs =  args.bsreps
+        
+        bsreps = [[] for i in range (nbs)]
+        
+        for f in bslist:
+            trees = open(f).readlines()
+            for i in range(min(nbs, len(trees))):
+                bsreps[i].append(trees[i])
+            if len(bsreps[0]) % 10 == 0:
+                print "Read", len(bsreps[0]), "bootstrap files"
+
+        if vars(args)['output']:
+            outfile = open(args.output + '.bs', 'w')
+            
+        for i, bsrep_str  in enumerate(bsreps):
+            print "Bootstrap Replicate", i
+            bsrep = dendropy.TreeList.get_from_string(''.join(bsrep_str), 'newick', taxon_namespace = a.tree.taxon_namespace)
+            bsa = ASTRID(bsrep)
+            bsa.run(method, None, args.taxon_cutoff)
+            bsa.tree.migrate_taxon_namespace(a.tree.taxon_namespace)
+            bstrees.add_tree(bsa.tree)
+            print bsa.tree_str()
+            if vars(args)['output']:
+                outfile.write(bsa.tree_str())
+
+        consensustree = bstrees.consensus_tree(add_support_as_node_annotation = True, support_as_percentages=True)
+        print "Majority consensus tree:"
+        for n in consensustree.nodes():
+            for an in n.annotations:
+                if an.name != 'support':
+                    n.annotations.remove(an)
+        for e in consensustree.edges():
+            e.annotations.clear()
+        cs_str = str(consensustree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, suppress_annotations=False))
+        print cs_str
+        if vars(args)['output']:
+            open(args.output + '.bs_consensus', 'w').write(cs_str)
+
+        
+        atree = bstrees.summarize_splits_on_tree(a.tree, add_support_as_node_annotation = True, support_as_percentages=True)
+        print "ASTRID tree with support:"
+        for n in a.tree.nodes() + a.tree.edges():
+            for an in n.annotations:
+                if an.name != 'support':
+                    n.annotations.remove(an)
+        for e in a.tree.edges():
+            e.annotations.clear()
+        astrid_str = str(a.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, suppress_annotations=False))
+        print astrid_str
+        if vars(args)['output']:
+            open(args.output + '.bs_tree', 'w').write(astrid_str)
+        
+            
