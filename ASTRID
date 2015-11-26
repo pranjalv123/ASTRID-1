@@ -39,7 +39,7 @@ if __name__ == '__main__':
     if vars(args)['bslist']:
         bslist = args.bslist
     elif vars(args)['bsfile']:
-        bslist = open(args.bsfile).readlines()
+        bslist = [i.strip() for i in open(args.bsfile).readlines()]
 
     a = ASTRID(open(args.input).read())
     a.run(method, fname, args.taxon_cutoff)
