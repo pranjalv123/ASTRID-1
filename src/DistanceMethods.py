@@ -17,7 +17,7 @@ import subprocess
 import os
 import ASTRID
 
-path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))#+ '/ASTRID'
+path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/ASTRID'
 print path 
 phydstar_exec=path + '/distmethods/' + 'PhyDstar.jar'
 fastme_exec=path + '/distmethods/' + 'fastme'
