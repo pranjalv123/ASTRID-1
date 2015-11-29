@@ -58,6 +58,7 @@ optional arguments:
 ASTRID is also easy to use from within Python:
 
     import dendropy
+    import ASTRID
     tl = dendropy.TreeList.get_from_path('test/song_mammals.424.gene.tre', 'newick')
     a = ASTRID.ASTRID(tl)
     a.run('auto')
