@@ -54,3 +54,13 @@ optional arguments:
                         Save distance matrix in PHYLIP format, or use cached
                         matrix if it exists (useful for trying multiple
                         distance-based methods)
+
+ASTRID is also easy to use from within Python:
+
+    import dendropy
+    tl = dendropy.TreeList.get_from_path('test/song_mammals.424.gene.tre', 'newick')
+    a = ASTRID.ASTRID(tl)
+    a.run('auto')
+    print str(a.tree)
+    
+    
