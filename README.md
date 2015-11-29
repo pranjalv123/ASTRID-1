@@ -11,6 +11,10 @@ To install the most recent stable version of ASTRID, run (as root)
 
       pip install astrid-phylo
       
+or, to install the development version from Git, run
+
+      pip install git+https://github.com/pranjalv123/ASTRID/
+
 (you should have installed setuptools, numpy, dendropy, and a C++ compiler)
 
 You can also install the most recent version from github by cloning the repository, then running (as root)
