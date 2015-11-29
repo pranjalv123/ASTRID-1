@@ -1,0 +1,8 @@
+Version 1.1
+===========
+ - Faster distance matrix calculation
+ - Fixed install script
+ 
+Version 1.0
+===========
+ - Initial release
