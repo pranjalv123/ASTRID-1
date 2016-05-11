@@ -116,17 +116,17 @@ class ASTRID:
         print "reading trees"
         t = time.time()
         self.read_trees(taxon_cutoff)
-        print t - time.time(), "seconds"
+        print time.time() - t, "seconds"
         print "generating matrix"
         t = time.time()
         self.generate_matrix()
-        print t - time.time(), "seconds"
+        print time.time() - t, "seconds"
         print "writing matrix", fname
         t = time.time()
         self.write_matrix(fname)
-        print t - time.time(), "seconds"
+        print time.time() - t, "seconds"
         print "inferring tree"
         t = time.time()
         self.infer_tree(method)
-        print t - time.time(), "seconds"
+        print time.time() - t, "seconds"
         
