@@ -14,12 +14,10 @@
 # along with ASTRID.  If not, see <http://www.gnu.org/licenses/>.
 
 import dendropy
-import numpy as np
 import sys
 import subprocess
 import tempfile
 import os
-from numpy import ma
 import time
 import argparse
 import DistanceMethods
