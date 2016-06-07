@@ -24,7 +24,9 @@ fastme2_exec=path + 'fastme'
 
 
 def phydstar(nj, fname):
-    p = subprocess.Popen(['java',  '-jar', phydstar_exec, '-d', nj, '-i', fname])
+    args = ['java',  '-jar', phydstar_exec, '-d', nj, '-i', fname]
+    print ' '.join(args)
+    p = subprocess.Popen(args)
     p.wait()
     tree = open(fname + '_' + nj.lower() + '.t').read()
     return tree

@@ -34,9 +34,10 @@ int newick_to_ts(const string& s, unordered_set<string>& taxa) {
       if (prevtok == ")" or prevtok == ":") {	
 	continue;
       }
-
-      taxa.insert(tok);
-      taxon_count ++;
+      if(tok.find_first_not_of(' ') != string::npos) {
+	taxa.insert(tok);
+	taxon_count ++;
+      }
     }
     prevtok = tok;
   }
@@ -50,8 +51,8 @@ void newick_to_dm(const string& s, TaxonSet& ts, dm_type& dist_mat, dm_type& mas
   
   tokenizer tokens(s, sep);
   
-  vector<double> dists(100, 0);
-  vector<double> ops(100, 0);
+  vector<double> dists(ts.size(), 0);
+  vector<double> ops(ts.size(), 0);
 
   vector<Taxon> seen;
   string prevtok = "";
@@ -77,7 +78,7 @@ void newick_to_dm(const string& s, TaxonSet& ts, dm_type& dist_mat, dm_type& mas
     else if (tok == ":") {
     } else if (tok == ",") {
     } else {
-      if (prevtok == ")" or prevtok == ":") {
+      if (prevtok == ")" or prevtok == ":" or (tok == " " and prevtok == ",")) {
 	continue;
       }
       boost::algorithm::trim(tok);

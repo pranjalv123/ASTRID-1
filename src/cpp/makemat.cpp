@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <cctype>
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
@@ -58,9 +59,10 @@ int main(int argc, char** argv) {
   TaxonSet ts(taxa.size());
   
   for (string t : taxa) {
-    ts.add(t);  
+    ts.add(t);
   }
-
+  ts.freeze();
+  
   dm_type dist_mat(boost::extents[taxa.size()][taxa.size()]);
   dm_type mask_mat(boost::extents[taxa.size()][taxa.size()]);
 
