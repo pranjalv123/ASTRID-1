@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (ASTRID)
 set (ASTRID_VERSION_MAJOR 1)
-set (ASTRID_VERSION_MAJOR 3)
+set (ASTRID_VERSION_MINOR 3)
 include(ExternalProject)
 
 ExternalProject_Add(FastME2
