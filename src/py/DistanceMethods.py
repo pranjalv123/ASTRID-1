@@ -17,11 +17,10 @@ import subprocess
 import os
 import ASTRID
 
-path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/ASTRID'
-print path 
-phydstar_exec=path + '/distmethods/' + 'PhyDstar.jar'
-fastme_exec=path + '/distmethods/' + 'fastme'
-fastme2_exec=path + '/distmethods/' + 'fastme2'
+path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/../../'
+phydstar_exec=path + 'PhyDstar.jar'
+#fastme_exec=path + ' 'fastme'
+fastme2_exec=path + 'fastme'
 
 
 def phydstar(nj, fname):
@@ -47,7 +46,7 @@ def fastme(fname):
     tree = open(fname + '_fastme.t').read()
     return tree
 
-def fastme2(fname, method=None, nni=False, spr=False):
+def fastme2(fname, method='bal', nni=True, spr=False):
     print fname + '_fastme.t'
     args = [fastme2_exec, '-i', fname, '-o', fname + '_fastme2.t']
     if nni:
@@ -57,21 +56,22 @@ def fastme2(fname, method=None, nni=False, spr=False):
     if method:
         args.append('-m')
         args.append(method)
+    print ' '.join(args)
     p = subprocess.Popen(args)
     p.wait()
     tree = open(fname + '_fastme2.t').read()
     return tree
 
 def fastme2_bal(fname):
-    return fastme2(fname, 'bal')
+    return fastme2(fname, 'bal', nni=False)
 def fastme2_bionj(fname):
-    return fastme2(fname, 'bionj')
+    return fastme2(fname, 'bionj', nni=False)
 def fastme2_olsme(fname):
-    return fastme2(fname, 'olsme')
+    return fastme2(fname, 'olsme', nni=False)
 def fastme2_nj(fname):
-    return fastme2(fname, 'nj')
+    return fastme2(fname, 'nj', nni=False)
 def fastme2_unj(fname):
-    return fastme2(fname, 'unj')
+    return fastme2(fname, 'unj', nni=False)
 
 def fastme2_bal_nni(fname):
     return fastme2(fname, 'bal', nni=True)

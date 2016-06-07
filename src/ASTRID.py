@@ -98,7 +98,7 @@ class ASTRID:
             if self.has_missing:
                 method = "bionj"
             else:
-                method = "fastme"
+                method = "fastme2"
         self.state = "Inferring tree with " + method
         method = getattr(DistanceMethods, method)
         self.tree = dendropy.Tree.get_from_string(method(self.fname), 'newick')

@@ -1,0 +1,19 @@
+from distutils.core import setup
+
+import sys
+
+print "RUNNING SETUP"
+
+print sys.argv
+
+
+setup(name="astrid-phylo",
+      version='${PACKAGE_VERSION}',
+      author="Pranjal Vachaspati",
+      author_email="pr@nj.al",
+      url="https://github.com/pranjalv123/ASTRID",
+      description='Accurate Species TRee Reconstruction with Internode Distances',
+      package_dir={ 'ASTRID': '${CMAKE_CURRENT_SOURCE_DIR}' },
+      packages=['ASTRID'],
+      license='GPLv3'
+)

@@ -3,10 +3,11 @@
 import argparse
 import sys
 import dendropy
-if '--local' in sys.argv:
-    from src import ASTRID
-else:
-    from ASTRID import ASTRID
+import os
+
+sys.path.insert(0, os.path.dirname(__file__) + '/lib/python/')
+
+from ASTRID import ASTRID
 
     
 if __name__ == '__main__':
