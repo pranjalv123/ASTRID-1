@@ -1,5 +1,4 @@
 #include "TaxonSet.hpp"
-#include "Logger.hpp"
 #include <iostream>
 #include <cstring>
 #include <cassert>
@@ -73,7 +72,6 @@ Taxon TaxonSet::add(const string& str) {
   taxa.push_back(str);
   index[str] = i;
   taxa_bs.set(i);
-  DEBUG << "Adding taxon: " << str << " with ID " << i << endl;
   return i;
 }  
 
