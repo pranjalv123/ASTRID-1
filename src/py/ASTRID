@@ -2,11 +2,11 @@
 
 import argparse
 import sys
-import dendropy
 import os
 
 sys.path.insert(0, os.path.dirname(__file__) + '/lib/python/')
 
+import dendropy
 from ASTRID import ASTRID
 
     
