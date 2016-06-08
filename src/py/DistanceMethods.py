@@ -15,12 +15,20 @@
 
 import subprocess
 import os
+import sys
 import ASTRID
 
-path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/../../'
-phydstar_exec=path + 'PhyDstar.jar'
+if getattr( sys, 'frozen', False ) :
+    path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/'
+    fastme2_exec=path + 'fastme'
+    path = os.path.dirname(sys.executable) + '/' 
+    phydstar_exec=path + 'PhyDstar.jar'        
+else:
+    path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/../../'
+    fastme2_exec=path + 'fastme'
+    phydstar_exec=path + 'PhyDstar.jar'    
 #fastme_exec=path + ' 'fastme'
-fastme2_exec=path + 'fastme'
+
 
 
 def phydstar(nj, fname):

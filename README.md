@@ -8,7 +8,7 @@ Join the ASTRID user group at https://groups.google.com/forum/#!forum/astrid-use
 
 # Installation (binary)
 
-Download and unzip the appropriate binary file for your operating system.
+Download the appropriate binary file for your operating system.
 
 # Getting PhyD*
 
@@ -17,7 +17,6 @@ a lot of data, but it must be downloaded separately for licensing
 reasons. You can download it at
 http://www.atgc-montpellier.fr/phyd/binaries.php, and place
 `PhyDstar.jar` in the same directory as the ASTRID executable.
-
 
 # Installation (source)
 
@@ -44,6 +43,11 @@ Configure and build
 Make will automatically download and compile FastME 2, and place all
 necessary files in `build/bin/`.
 
+## Packaging
+
+Get PyInstaller (http://www.pyinstaller.org/), and run `pyinstaller
+ASTRID.spec` from the repository root. This will produce the `dist`
+folder and an `ASTRID` executable in it.
 
 # Usage
       ASTRID [-h] -i INPUT [-b --bsfile BSFILE]

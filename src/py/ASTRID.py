@@ -31,15 +31,20 @@ class ASTRID:
         self.remap_names=remap_names
                 
     def write_matrix(self, fname=None, nanplaceholder='-99.0', taxon_cutoff = 0):
-
+        if getattr( sys, 'frozen', False ) :
+            path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+        else:
+            path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/../../'
+        
         self.state = "Writing matrix"
 
         tmp = None
         if fname == None:
             tmpfd, fname = tempfile.mkstemp()
             tmp = os.fdopen(tmpfd, 'w')
-        tmp = open(fname, 'w')
-        args = [os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/../../makemat', '--matrix', fname, '--taxlist', fname + '_taxlist', '--taxcutoff', str(taxon_cutoff), '--nanplaceholder', str(nanplaceholder), '--n_missing', fname + '_nmissing']
+        tmp = open(fname, 'w')    
+        
+        args = [path + '/makemat', '--matrix', fname, '--taxlist', fname + '_taxlist', '--taxcutoff', str(taxon_cutoff), '--nanplaceholder', str(nanplaceholder), '--n_missing', fname + '_nmissing']
         print args
         subprocess.Popen(args, stdin = subprocess.PIPE).communicate(self.genetrees)
         
