@@ -1,34 +1,49 @@
-# ASTRID
+# ASTRID 1.3
+
 Accurate Species TRee Reconstruction with Internode Distances
 
 For more information, see http://pranjalv123.github.io/ASTRID/
 
 Join the ASTRID user group at https://groups.google.com/forum/#!forum/astrid-users/
 
-# Installation
+# Installation (binary)
 
-To install the most recent stable version of ASTRID, run (as root)
+Download and unzip the appropriate binary file for your operating system.
 
-      pip install astrid-phylo
-      
-or, to install the development version from Git, run
+# Getting PhyD*
 
-      pip install git+https://github.com/pranjalv123/ASTRID/
+PhyD* is necessary for estimating species trees when trees are missing
+a lot of data, but it must be downloaded separately for licensing
+reasons. You can download it at
+http://www.atgc-montpellier.fr/phyd/binaries.php, and place
+`PhyDstar.jar` in the same directory as the ASTRID executable.
 
-(you should have installed setuptools, numpy, dendropy, and a C++ compiler)
 
-You can also install the most recent version from github by cloning the repository, then running (as root)
+# Installation (source)
 
-      python setup.py install 
-      
-To install locally (for example, if you're running on a server where you don't have root access), you can do
+## Dependencies:
+   - CMake (https://cmake.org/)
+   - Boost (http://www.boost.org/)
+   - DendroPy version 4 or greater https://pythonhosted.org/DendroPy/
+   - A recent C++ compiler
+   
+Clone the repository and enter the directory.
 
-      pip install astrid-phylo --user
-      
-or 
+      git clone git@github.com:pranjalv123/ASTRID.git
+      cd ASTRID
 
-      python setup.py install --user
-      
+Create a build folder
+
+      mkdir build && cd build
+
+Configure and build
+
+      cmake ../src/
+      make
+
+Make will automatically download and compile FastME 2, and place all
+necessary files in `build/bin/`.
+
 
 # Usage
       ASTRID [-h] -i INPUT [-b --bsfile BSFILE]
