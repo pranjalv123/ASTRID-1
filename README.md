@@ -17,6 +17,7 @@ a lot of data, but it must be downloaded separately for licensing
 reasons. You can download it at
 http://www.atgc-montpellier.fr/phyd/binaries.php, and place
 `PhyDstar.jar` in the same directory as the ASTRID executable.
+You will also need Java installed for PhyD* to work.
 
 # Installation (source)
 
