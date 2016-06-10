@@ -45,7 +45,7 @@ class ASTRID:
         tmp = open(fname, 'w')    
         
         args = [path + '/makemat', '--matrix', fname, '--taxlist', fname + '_taxlist', '--taxcutoff', str(taxon_cutoff), '--nanplaceholder', str(nanplaceholder), '--n_missing', fname + '_nmissing']
-        print args
+
         subprocess.Popen(args, stdin = subprocess.PIPE).communicate(self.genetrees)
         
         self.fname = fname

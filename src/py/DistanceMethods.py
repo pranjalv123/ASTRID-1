@@ -33,7 +33,7 @@ else:
 
 def phydstar(nj, fname):
     args = ['java',  '-jar', phydstar_exec, '-d', nj, '-i', fname]
-    print ' '.join(args)
+
     p = subprocess.Popen(args)
     p.wait()
     tree = open(fname + '_' + nj.lower() + '.t').read()
@@ -49,15 +49,15 @@ def unj(fname):
     return phydstar('UNJ', fname)
 
 def fastme(fname):
-    print fastme_exec
-    print fname + '_fastme.t'
+
+
     p = subprocess.Popen([fastme_exec, '-i', fname, '-o', fname + '_fastme.t'])
     p.wait()
     tree = open(fname + '_fastme.t').read()
     return tree
 
 def fastme2(fname, method='bal', nni=True, spr=False):
-    print fname + '_fastme.t'
+
     args = [fastme2_exec, '-i', fname, '-o', fname + '_fastme2.t']
     if nni:
         args.append('-n')
@@ -66,7 +66,7 @@ def fastme2(fname, method='bal', nni=True, spr=False):
     if method:
         args.append('-m')
         args.append(method)
-    print ' '.join(args)
+
     p = subprocess.Popen(args)
     p.wait()
     tree = open(fname + '_fastme2.t').read()
