@@ -6,7 +6,7 @@ if (PYTHON)
     file(GLOB pysrc ${CMAKE_CURRENT_SOURCE_DIR}/*.py)
     set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
     set(SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
-    set(DEPS       ${pysrc})
+    set(DEPS       ${pysrc} ${CMAKE_CURRENT_SOURCE_DIR}/ASTRID)
     set(OUTPUT      "${CMAKE_CURRENT_BINARY_DIR}/build/build_timestamp")
     set(OUTPUT2      "${CMAKE_CURRENT_BINARY_DIR}/build/install_timestamp")
 

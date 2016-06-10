@@ -68,8 +68,8 @@ if __name__ == '__main__':
             outfile = open(args.output + '.bs', 'w')
             
         for i, bsrep_str  in enumerate(bsreps):
-            print "Bootstrap Replicate", i
-            bsrep = dendropy.TreeList.get_from_string(''.join(bsrep_str), 'newick', taxon_namespace = a.tree.taxon_namespace)
+            print "Bootstrap Replicate", i + 1
+            bsrep = ''.join(bsrep_str)
             bsa = ASTRID(bsrep)
             bsa.run(method, None, args.taxon_cutoff)
             bsa.tree.migrate_taxon_namespace(a.tree.taxon_namespace)
@@ -78,7 +78,7 @@ if __name__ == '__main__':
             if vars(args)['output']:
                 outfile.write(bsa.tree_str())
 
-        consensustree = bstrees.consensus_tree(add_support_as_node_annotation = True, support_as_percentages=True)
+        consensustree = bstrees.consensus_tree(set_support_as_node_label = True, support_as_percentages=True)
         print "Majority consensus tree:"
         for n in consensustree.nodes():
             for an in n.annotations:
@@ -86,13 +86,13 @@ if __name__ == '__main__':
                     n.annotations.remove(an)
         for e in consensustree.edges():
             e.annotations.clear()
-        cs_str = str(consensustree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, suppress_annotations=False))
+        cs_str = str(consensustree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=False, suppress_annotations=True, preserve_spaces=True, unquoted_underscores=True))
         print cs_str
         if vars(args)['output']:
             open(args.output + '.bs_consensus', 'w').write(cs_str)
 
         
-        atree = bstrees.summarize_splits_on_tree(a.tree, add_support_as_node_annotation = True, support_as_percentages=True)
+        atree = bstrees.summarize_splits_on_tree(a.tree, set_support_as_node_label = True, support_as_percentages=True)
         print "ASTRID tree with support:"
         for n in a.tree.nodes() + a.tree.edges():
             for an in n.annotations:
@@ -100,7 +100,7 @@ if __name__ == '__main__':
                     n.annotations.remove(an)
         for e in a.tree.edges():
             e.annotations.clear()
-        astrid_str = str(a.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, suppress_annotations=False))
+        astrid_str = str(a.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=False, suppress_annotations=True, preserve_spaces=True, unquoted_underscores=True))
         print astrid_str
         if vars(args)['output']:
             open(args.output + '.bs_tree', 'w').write(astrid_str)

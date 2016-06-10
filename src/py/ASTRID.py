@@ -71,7 +71,7 @@ class ASTRID:
         open(outputfile, 'w').write(self.tree_str())
 
     def tree_str(self):
-        return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True)
+        return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, unquoted_underscores=True, preserve_spaces=True)
     def run(self, method, fname=None, taxon_cutoff = 0):
         print "generating matrix"
         t = time.time()
