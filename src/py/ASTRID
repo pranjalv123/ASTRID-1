@@ -86,7 +86,8 @@ if __name__ == '__main__':
                     n.annotations.remove(an)
         for e in consensustree.edges():
             e.annotations.clear()
-        cs_str = str(consensustree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=False, suppress_annotations=True, preserve_spaces=True, unquoted_underscores=True))
+#        consensustree.reroot_at_midpoint()
+        cs_str = str(consensustree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=False, suppress_annotations=True, preserve_spaces=True, unquoted_underscores=True, suppress_rooting=True))
         print cs_str
         if vars(args)['output']:
             open(args.output + '.bs_consensus', 'w').write(cs_str)
@@ -100,7 +101,8 @@ if __name__ == '__main__':
                     n.annotations.remove(an)
         for e in a.tree.edges():
             e.annotations.clear()
-        astrid_str = str(a.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=False, suppress_annotations=True, preserve_spaces=True, unquoted_underscores=True))
+
+        astrid_str = str(a.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=False, suppress_annotations=True, preserve_spaces=True, unquoted_underscores=True, suppress_rooting=True))
         print astrid_str
         if vars(args)['output']:
             open(args.output + '.bs_tree', 'w').write(astrid_str)

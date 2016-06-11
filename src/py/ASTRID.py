@@ -49,19 +49,24 @@ class ASTRID:
         subprocess.Popen(args, stdin = subprocess.PIPE).communicate(self.genetrees)
         
         self.fname = fname
-        self.taxindices_inv = [i.strip() for i in open(fname + '_taxlist').readlines()]
+        self.taxindices_inv = [i.strip().replace("'", "") for i in open(fname + '_taxlist').readlines()]
         self.has_missing = int(open(fname + '_nmissing').read())
         
 
     def infer_tree(self, method):
         if method == "auto":
             if self.has_missing:
+                print "Distance matrix has", self.has_missing, "missing entries (out of ", len(self.taxindices_inv)**2, ")"
+                print "This may result in an inaccurate tree"
+                print "Using BioNJ*"
                 method = "bionj"
             else:
                 method = "fastme2_bal_nni"
         self.state = "Inferring tree with " + method
         method = getattr(DistanceMethods, method)
         self.tree = dendropy.Tree.get_from_string(method(self.fname), 'newick')
+        self.tree.reroot_at_midpoint()
+        self.tree.update_bipartitions()
         if self.remap_names:
             for t in self.tree.taxon_namespace:
                 t.label = self.taxindices_inv[int(t.label)]
@@ -71,11 +76,11 @@ class ASTRID:
         open(outputfile, 'w').write(self.tree_str())
 
     def tree_str(self):
-        return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, unquoted_underscores=True, preserve_spaces=True)
+        return self.tree.as_string('newick', suppress_edge_lengths=True, suppress_internal_node_labels=True, unquoted_underscores=True, preserve_spaces=True, suppress_rooting=True)
     def run(self, method, fname=None, taxon_cutoff = 0):
         print "generating matrix"
         t = time.time()
-        self.write_matrix(fname, taxon_cutoff)
+        self.write_matrix(fname, taxon_cutoff=taxon_cutoff)
         print time.time() - t, "seconds"
         print "inferring tree"
         t = time.time()

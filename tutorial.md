@@ -1,7 +1,8 @@
 # ASTRID tutorial
 
-ASTRID is a fast, highly scalable coalescent-aware species tree
-estimation program.
+ASTRID is a fast, highly scalable species tree estimation program that
+is statistically consistent under the multi-species coalescent
+model.
 
 # Installing ASTRID
 
@@ -129,17 +130,69 @@ This will create a file called `bslist` with paths to all the
 bootstrap gene trees. To get the ASTRID tree with bootstrap support,
 run
 
-	./ASTRID -b bs-files -i song_mammals.424.gene.tre
+	./ASTRID -b bs-files -i test/song_mammals.424.gene.tre -o test/astrid_mammalian_tree
 
 This will run 100 bootstrap replicates and output two trees. The first
 is a majority consensus tree of the replicates with branch support,
-and the second is the ASTRID tree on the input data with branch
-support.
+and the second 
+
+This creates two files, `test/astrid_mammalian_tree.bs_tree`, which is
+the ASTRID tree on the input data with branch support, and
+`test/astrid_mammalian_tree.bs_consensus`, which is a majority
+consensus tree of the bootstrap replicates with branch support.
+
+Note that these two trees are different! The ASTRID tree puts tree
+shrews with rodents with 47% support, while the majority consensus
+tree puts tree shrews with primates with 53% support.
 
 # Calculating branch support and branch lengths with ASTRAL
 
+For this part of the tutorial you will need ASTRAL
+(https://github.com/smirarab/ASTRAL/). 
+
+Instead of using MLBS to calculate branch support, we can use ASTRAL
+to annotate our trees with branch support and edge lengths based on
+quartet frequencies in the input gene trees (see
+(here)[http://mbe.oxfordjournals.org/content/early/2016/05/12/molbev.msw079.full]
+for more info).
+
+This is quite straightforward - we get our mammalian tree as before
+
+     ./ASTRID -i test/song_mammals.424.gene.tre -o  test/astrid_mammalian_tree
+
+Then we run ASTRAL as follows (substituting in whatever version of
+ASTRAL you have):
+
+     java -jar astral.4.10.2.jar -i test/song_mammals.424.gene.tre -q test/astrid_mammalian_tree -o annotated_mammalian_tree
+
+Now we can visualize this, and we see that support values here are
+substantially higher than in the MLBS case, with 91% support for the
+placement of tree shrews. We also get edge lengths, which we do not
+get from the MLBS process. 
+
 # Running ASTRID on sparse datasets
 
-# Running ASTRID on large datasets
+ASTRID will run on datasets where the input gene trees are missing
+taxa. If there is a pair of taxa that never occur in the same tree,
+though, there will be a misisng entry in the distance matrix. In this
+case, we need to use
+(PhyD*)[http://www.atgc-montpellier.fr/phyd/binaries.php] instead of
+FastME to estimate the tree. Download PhyD* and put `PhyDstar.jar` in
+the same folder as the ASTRID binary.
 
-# Manually specifying the distance method
+We will use a seabirds supertree dataset, from (). This dataset has 7
+source trees and 121 taxa. If we run
+
+       ASTRID -i seabirds.source_trees
+
+we will see in the output
+
+   Distance matrix has 5092 missing entries (out of  14641 )
+   This may result in an inaccurate tree
+   Using BioNJ*
+
+Over a third of the entries in the distance matrix are unknown, so
+it's not surprising that we might not get good results here. However,
+if we have even a single source tree on all the taxa, ASTRID is likely
+to give good results.
+
