@@ -1,4 +1,4 @@
-# ASTRID 1.3
+# ASTRID 1.4
 
 Accurate Species TRee Reconstruction with Internode Distances
 
@@ -9,15 +9,6 @@ Join the ASTRID user group at https://groups.google.com/forum/#!forum/astrid-use
 # Installation (binary)
 
 Download the appropriate binary file for your operating system.
-
-# Getting PhyD*
-
-PhyD* is necessary for estimating species trees when trees are missing
-a lot of data, but it must be downloaded separately for licensing
-reasons. You can download it at
-http://www.atgc-montpellier.fr/phyd/binaries.php, and place
-`PhyDstar.jar` in the same directory as the ASTRID executable.
-You will also need Java installed for PhyD* to work.
 
 # Installation (source)
 
