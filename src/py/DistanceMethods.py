@@ -21,7 +21,6 @@ import ASTRID
 if getattr( sys, 'frozen', False ) :
     path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/'
     fastme2_exec=path + 'fastme'
-    path = os.path.dirname(sys.executable) + '/' 
     phydstar_exec=path + 'PhyDstar.jar'        
 else:
     path = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + '/../../'
