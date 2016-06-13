@@ -177,8 +177,7 @@ taxa. If there is a pair of taxa that never occur in the same tree,
 though, there will be a misisng entry in the distance matrix. In this
 case, we need to use
 (PhyD*)[http://www.atgc-montpellier.fr/phyd/binaries.php] instead of
-FastME to estimate the tree. Download PhyD* and put `PhyDstar.jar` in
-the same folder as the ASTRID binary.
+FastME to estimate the tree. 
 
 We will use a seabirds supertree dataset, from (). This dataset has 7
 source trees and 121 taxa. If we run
