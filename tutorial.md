@@ -120,7 +120,7 @@ Multi-locus bootstrapping lets us estimate bootstrap support on edges
 of our estimated tree. We calculate bootstrap replicates on each gene,
 and estimate species trees for each set of bootstrap
 replicates. Currently ASTRID supports site-only resampling ([Seo,
-2008]()). We have supplied 100 bootstrap replicates for each of the
+2008](http://mbe.oxfordjournals.org/content/25/5/960.short)). We have supplied 100 bootstrap replicates for each of the
 mammalian genes in the `424genes` folder. To get a list of all the
 bootstrap files, run
 
@@ -177,8 +177,7 @@ taxa. If there is a pair of taxa that never occur in the same tree,
 though, there will be a misisng entry in the distance matrix. In this
 case, we need to use
 (PhyD*)[http://www.atgc-montpellier.fr/phyd/binaries.php] instead of
-FastME to estimate the tree. Download PhyD* and put `PhyDstar.jar` in
-the same folder as the ASTRID binary.
+FastME to estimate the tree. 
 
 We will use a seabirds supertree dataset, from (). This dataset has 7
 source trees and 121 taxa. If we run
