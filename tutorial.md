@@ -120,7 +120,7 @@ Multi-locus bootstrapping lets us estimate bootstrap support on edges
 of our estimated tree. We calculate bootstrap replicates on each gene,
 and estimate species trees for each set of bootstrap
 replicates. Currently ASTRID supports site-only resampling ([Seo,
-2008]()). We have supplied 100 bootstrap replicates for each of the
+2008](http://mbe.oxfordjournals.org/content/25/5/960.short)). We have supplied 100 bootstrap replicates for each of the
 mammalian genes in the `424genes` folder. To get a list of all the
 bootstrap files, run
 
