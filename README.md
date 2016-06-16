@@ -8,6 +8,8 @@ Join the ASTRID user group at https://groups.google.com/forum/#!forum/astrid-use
 
 # Installation (binary)
 
+ASTRID is available for Linux, Mac OS X, and Windows. 
+
 Download the appropriate binary file for your operating system at https://github.com/pranjalv123/ASTRID/releases
 
 # Installation (source)
