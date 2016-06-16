@@ -1,5 +1,7 @@
 # ASTRID 1.4
 
+# Download [HERE](https://github.com/pranjalv123/ASTRID/Releases)
+
 Accurate Species TRee Reconstruction with Internode Distances
 
 For more information, see http://pranjalv123.github.io/ASTRID/
