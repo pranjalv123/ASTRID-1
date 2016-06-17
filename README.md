@@ -28,6 +28,8 @@ or use `ASTRID-osx` when `ASTRID` is specified in the documentation. (replacing 
 
 # Installation (source)
 
+YOU DO NOT NEED TO DO ANY OF THIS TO RUN ASTRID - THIS IS PRIMARILY FOR ASTRID DEVELOPERS 
+
 ## Dependencies:
    - CMake (https://cmake.org/)
    - Boost (http://www.boost.org/)
