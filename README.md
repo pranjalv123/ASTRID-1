@@ -16,7 +16,7 @@ Download the appropriate binary file for your operating system at https://github
 
 You may need to run
 
-    chmod -x ASTRID-osx 
+    chmod +x ASTRID-osx 
 
 in order to be able to execute it.
 
