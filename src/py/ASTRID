@@ -29,6 +29,14 @@ if __name__ == '__main__':
                         help="Save distance matrix in PHYLIP format, or use cached matrix if it exists (useful for trying multiple distance-based methods)")
     parser.add_argument('--taxon-cutoff', dest='taxon_cutoff', default=0, type=int,
                         help="Only take trees with at least this many taxa")
+    parser.add_argument('--impute-const', dest='impute_const', type=float,
+                        help="Fill in missing matrix entries with a constant")
+    parser.add_argument('--impute-tree', dest='impute_tree',
+                        help="Fill in missing matrix entries with distances from a reference tree")
+    parser.add_argument('--backbone', dest='backbone',
+                        help="Backbone tree for completion")    
+#    parser.add_argument('--impute-matrix', dest='impute_matrix',
+#                        help="Fill in missing matrix entries with distances from a reference matrix")    
     
     args = parser.parse_args()
 
@@ -42,7 +50,17 @@ if __name__ == '__main__':
     elif vars(args)['bsfile']:
         bslist = [i.strip() for i in open(args.bsfile).readlines()]
 
-    a = ASTRID(open(args.input).read())
+    if vars(args)['impute_tree']:
+        impute_tree = args.impute_tree
+    else:
+        impute_tree = None
+    if vars(args)['impute_const']:
+        impute_const = args.impute_const
+    else:
+        impute_const = None
+
+
+    a = ASTRID(open(args.input).read(), True, impute_tree, impute_const)
     a.run(method, fname, args.taxon_cutoff)
 
     print "ASTRID tree:"

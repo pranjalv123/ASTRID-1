@@ -14,7 +14,7 @@ ExternalProject_Add(FastME2
 
   BUILD_IN_SOURCE 1
   
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
+  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} LDFLAGS=-static 
 )
 
 

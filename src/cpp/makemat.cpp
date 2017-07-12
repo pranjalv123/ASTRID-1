@@ -10,6 +10,16 @@
 namespace po = boost::program_options;
 using namespace std;
 
+void impute(dm_type& dist_mat, dm_type& mask_mat, dm_type& impute_mat, unordered_set<string>& taxa) {
+  for (int i = 0; i < taxa.size(); i++) {
+    for (int j = 0; j < taxa.size(); j++) {
+      if ((i != j) && mask_mat[i][j] == 0) {
+	dist_mat[i][j] = impute_mat[i][j];
+	mask_mat[i][j] = 1;
+      }
+    }
+  }
+}
 
 int main(int argc, char** argv) {
 
@@ -31,6 +41,10 @@ int main(int argc, char** argv) {
   desc.add_options()
     ("taxcutoff", po::value<int>()->default_value(0), "minimum taxa in a tree");  
 
+  desc.add_options()
+    ("impute-tree", po::value<string>()->default_value(""), "impute missing values from tree"); 
+  desc.add_options()
+    ("impute-mat", po::value<string>()->default_value(""), "impute missing values from matrix");  
   
   desc.add_options()
     ("nanplaceholder", po::value<string>()->default_value("--"), "representation for nan in matrix");  
@@ -71,6 +85,22 @@ int main(int argc, char** argv) {
       newick_to_dm(tree, ts, dist_mat, mask_mat);
   }
 
+  
+  // if (vm["impute-mat"].as<str>().size()) {
+  //   dm_type impute_dist_mat(boost::extents[taxa.size()][taxa.size()]);
+  //   dm_type impute_mask_mat(boost::extents[taxa.size()][taxa.size()]);
+  //   read_dist_mat(val["impute-mat"], impute_dist_mat, impute_mask_mat);
+  //   impute(dist_mat, mask_mat, impute_dist_mat);
+  // }
+  if (vm["impute-tree"].as<string>().size()) {
+    dm_type impute_dist_mat(boost::extents[taxa.size()][taxa.size()]);
+    dm_type impute_mask_mat(boost::extents[taxa.size()][taxa.size()]);
+    ifstream infile(vm["impute-tree"].as<string>());
+    string line;
+    getline(infile, line);
+    newick_to_dm(line, ts, impute_dist_mat, impute_mask_mat);
+    impute(dist_mat, mask_mat, impute_dist_mat, taxa);
+  }
 
   ofstream matfile(vm["matrix"].as<string>());
   ofstream taxlist(vm["taxlist"].as<string>());

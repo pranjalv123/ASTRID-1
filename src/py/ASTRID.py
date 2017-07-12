@@ -24,12 +24,13 @@ import DistanceMethods
 
 
 class ASTRID:
-    def __init__(self, genetrees, remap_names=True):
+    def __init__(self, genetrees, remap_names=True, impute_tree=None, impute_const = None):
         self.genetrees = genetrees
         self.pct = 0.0
         self.state = "Initialized"
         self.remap_names=remap_names
-                
+        self.impute_tree=impute_tree
+        self.impute_const=impute_const
     def write_matrix(self, fname=None, nanplaceholder='-99.0', taxon_cutoff = 0):
         if getattr( sys, 'frozen', False ) :
             path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -43,14 +44,22 @@ class ASTRID:
             tmpfd, fname = tempfile.mkstemp()
             tmp = os.fdopen(tmpfd, 'w')
         tmp = open(fname, 'w')    
+
+        if self.impute_const != None:
+            nanplaceholder = str(self.impute_const)
         
         args = [path + '/makemat', '--matrix', fname, '--taxlist', fname + '_taxlist', '--taxcutoff', str(taxon_cutoff), '--nanplaceholder', str(nanplaceholder), '--n_missing', fname + '_nmissing']
 
+        if self.impute_tree:
+            args += ['--impute-tree', str(self.impute_tree)]
+        
         subprocess.Popen(args, stdin = subprocess.PIPE).communicate(self.genetrees)
         
         self.fname = fname
         self.taxindices_inv = [i.strip().replace("'", "") for i in open(fname + '_taxlist').readlines()]
         self.has_missing = int(open(fname + '_nmissing').read())
+        if self.impute_const != None:
+            self.has_missing = False
         
 
     def infer_tree(self, method):

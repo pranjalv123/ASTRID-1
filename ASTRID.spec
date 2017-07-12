@@ -4,10 +4,10 @@ block_cipher = None
 
 
 a = Analysis(['build/bin/ASTRID'],
-             pathex=['build/bin/', 'build/bin/lib/python'],
+             pathex=['build/bin/', 'build/bin/lib/python/'],
              binaries=[],
              datas=[('build/bin/makemat', '.'), ('build/bin/fastme', '.'), ('build/bin/PhyDstar.jar', '.')],
-             hiddenimports=['ASTRID.ASTRID'],
+             hiddenimports=['ASTRID', 'ASTRID.ASTRID'],
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -24,5 +24,5 @@ exe = EXE(pyz,
           name='ASTRID',
           debug=False,
           strip=False,
-          upx=True,
+          upx=False,
           console=True )
