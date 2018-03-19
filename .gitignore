@@ -6,3 +6,4 @@ build/
 src/build
 dist/
 MANIFEST
+test/*
