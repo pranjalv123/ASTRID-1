@@ -1,0 +1,5 @@
+Supplant is a C++ library with commonly used tools for phylogenetic estimation.
+
+Priorities:
+1. Speed
+2. Ease of use
